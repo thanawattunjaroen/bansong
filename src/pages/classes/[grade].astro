@@ -1,0 +1,9 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {getCollection} from 'astro:content';
+import {grades} from '../../data/grades';
+export function getStaticPaths(){return grades.filter(g=>g.ready).map(g=>({params:{grade:String(g.id)},props:{grade:g}}));}
+const {grade}=Astro.props;
+const lessons=(await getCollection('lessons')).filter(l=>l.data.grade===grade.id).sort((a,b)=>a.data.order-b.data.order);
+---
+<Layout title={grade.title} active="classes"><div class="container page"><div class="breadcrumb"><a href="/">หน้าแรก</a> / <a href="/classes/">ชั้นเรียน</a> / {grade.short}</div><section class="class-banner"><span class="grade-number">{grade.short}</span><div><span class="eyebrow">ห้องเรียนคอมพิวเตอร์</span><h1>{grade.title}</h1><p>{grade.description}</p></div><span class="count">{lessons.length} บทเรียนตัวอย่าง</span></section><div class="section-head"><h2>เริ่มเรียนไปทีละบท</h2><span class="muted">เนื้อหาตัวอย่างสำหรับตรวจรูปแบบ</span></div><div class="lesson-list">{lessons.map(l=><a href={`/lessons/${l.id}/`}><span class="list-icon">{l.data.icon}</span><div><small>บทเรียนที่ {l.data.order} · {l.data.duration} นาที</small><h2>{l.data.title}</h2><p>{l.data.description}</p></div><span class="circle-arrow">→</span></a>)}</div><p class="notice">🌱 ห้องเรียนนี้จะมีบทเรียนเพิ่มเติมตามแผนการสอนของครู</p></div></Layout>

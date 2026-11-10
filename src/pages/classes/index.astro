@@ -1,0 +1,5 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import {grades} from '../../data/grades';
+---
+<Layout title="เลือกชั้นเรียน" active="classes"><div class="container page"><a class="breadcrumb" href="/">หน้าแรก / ชั้นเรียน</a><div class="page-heading"><span class="eyebrow">FIND YOUR CLASSROOM</span><h1>เลือกชั้นเรียนของเรา</h1><p>พื้นที่เรียนรู้สำหรับทุกชั้น เริ่มต้นด้วยบทเรียน ป.4 และ ป.5</p></div><div class="all-grades">{grades.map(g=><article class:list={['grade-tile',{unready:!g.ready}]}><span class="grade-number">{g.short}</span><span class="status">{g.ready?'พร้อมเข้าเรียน':'กำลังเตรียมบทเรียน'}</span><h2>{g.title}</h2><p>{g.description}</p>{g.ready?<a class="button" href={`/classes/${g.id}/`}>ดูบทเรียน →</a>:<span class="muted">พบกันเร็ว ๆ นี้</span>}</article>)}</div></div></Layout>
